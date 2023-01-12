@@ -1,0 +1,26 @@
+.block {
+  width: 382px;
+  background: #373F48;
+  border-radius: 5px;
+  padding: 15px 20px 25px;
+  margin-top: 20px
+}
+
+.title {
+  margin: 0;
+  text-align: center;
+}
+
+.line {
+  background: #42484F;
+  border: 2px solid #42484F;
+  border-radius: 1px;
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}

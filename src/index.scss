@@ -1,0 +1,23 @@
+body {
+  margin: 0;
+  font-family: "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* background-color: #2e353b; */
+  background: linear-gradient(252.44deg, #353B41 0%, #191A1C 100%), linear-gradient(180deg, #1F2225 0%, #2E353B 100%);
+  // height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #fff;
+  padding-bottom: 20px;
+}
+
+.button {
+  background-color: #00000000;
+  padding: 0;
+  margin: 0;
+  border: none;
+  color: #fff;
+}

@@ -1,0 +1,16 @@
+.button {
+  background: linear-gradient(93.88deg, #2F98CF 51.56%, #2FCFB2 100%);
+  box-shadow: 2px 2px 8px rgba(37, 37, 37, 0.25);
+  border-radius: 5px;
+  width: 118px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16px;
+  cursor: pointer;
+
+  &_active {
+    background: #2E353B;
+  }
+}
