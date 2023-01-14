@@ -1,17 +1,17 @@
 import React, {FC} from 'react'
 import s from './ButtonContainer.module.scss';
 import Button from '../UI/Button/Button';
+import { useAppSelector } from '../../hooks/useTypedSelector';
+import { BLOCK_ONE, BLOCK_THREE, BLOCK_TWO } from '../../utils/constants';
 
-interface IButtonContainerProps {
-  
-}
+const ButtonContainer: FC = () => {
+  const { buttonActiveBlockOne, buttonActiveBlockTwo, buttonActiveBlockThree } = useAppSelector(store => store.buttons)
 
-const ButtonContainer: FC<IButtonContainerProps> = () => {
   return (
     <section className={s.container}>
-      <Button title="Блок 1" />
-      <Button title="Блок 2" />
-      <Button title="Блок 3" />
+      <Button title={BLOCK_ONE} isActiveButton={buttonActiveBlockOne}/>
+      <Button title={BLOCK_TWO} isActiveButton={buttonActiveBlockTwo}/>
+      <Button title={BLOCK_THREE} isActiveButton={buttonActiveBlockThree}/>
     </section>
   );
 }

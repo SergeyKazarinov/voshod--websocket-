@@ -1,0 +1,16 @@
+{
+  "typescript.inlayHints.propertyDeclarationTypes.enabled": false,
+  "typescript.inlayHints.variableTypes.enabled": false,
+  "typescript.inlayHints.parameterTypes.enabled": false,
+  "typescript.inlayHints.functionLikeReturnTypes.enabled": false,
+  "workbench.editor.untitled.hint": "text",
+  "editor.inlayHints.enabled": "on",
+  "editor.inlayHints.fontSize": 10,
+  "editor.inlayHints.padding": false,
+  "editor.parameterHints.cycle": false,
+  "editor.parameterHints.enabled": true,
+  "javascript.inlayHints.enumMemberValues.enabled": false,
+  "javascript.inlayHints.parameterNames.enabled": "none",
+  "audioCues.noInlayHints": "auto",
+  "typescript.inlayHints.parameterNames.suppressWhenArgumentMatchesName": false
+}

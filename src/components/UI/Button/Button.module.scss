@@ -13,4 +13,9 @@
   &_active {
     background: #2E353B;
   }
+
+  &_error {
+    background: #ff0000;
+    cursor: auto;
+  }
 }
