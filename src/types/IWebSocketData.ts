@@ -24,3 +24,11 @@ export interface ISendMessage {
   valueType: string;
   value: string | number;
 }
+
+export interface IWebSocketInitialState {
+  block: string;
+  data: IData;
+  status: IStatus;
+  errorConnect: boolean;
+  isButtonInactive: boolean;
+}

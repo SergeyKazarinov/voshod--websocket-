@@ -5,12 +5,7 @@ import { SUBSCRIBE, UNSUBSCRIBE } from '../../utils/constants';
 import { useAppDispatch } from '../../hooks/useTypedSelector';
 import { setErrorConnect, setIsButtonInactive } from '../../services/slices/webSocketSlice';
 import { setAllButton } from '../../services/slices/buttonsSlice';
-
-interface IBlockProps {
-  title: string;
-  children: React.ReactNode;
-  ws: WebSocket | null;
-}
+import { IBlockProps } from '../../types/componentProps';
 
 const Block: FC<IBlockProps> = ({title, children, ws}) => {
   const dispatch = useAppDispatch();

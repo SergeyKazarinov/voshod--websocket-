@@ -2,23 +2,8 @@ import {FC, SyntheticEvent, useEffect} from 'react';
 import s from './Input.module.scss';
 import { useSetValues } from '../../../hooks/useSetValues';
 import { useAppSelector } from '../../../hooks/useTypedSelector';
-import { IData, ISendMessage, IStatus } from '../../../types/IWebSocketData';
-import { IFocusData } from '../../../types/webSocketSlice';
-
-interface IInputProps {
-  title: string;
-  label: string;
-  type: string;
-  id: string;
-  placeholder: string;
-  pattern?: string;
-  min?: number;
-  max?: number;
-  minLength?: number;
-  onFocus: ({command, block, field}: IFocusData) => void;
-  onBlur: ({command, block, field}: IFocusData) => void;
-  onSendData: ({command, block, valueType, value}: ISendMessage) => void;
-}
+import { IData, IStatus } from '../../../types/IWebSocketData';
+import { IInputProps } from '../../../types/componentProps';
 
 const Input: FC<IInputProps> = ({title, label, type, id, placeholder, pattern, min, max, minLength, onFocus, onBlur, onSendData}) => {
   const { data, status } = useAppSelector(store => store.webSocket);

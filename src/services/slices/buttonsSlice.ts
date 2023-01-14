@@ -1,5 +1,5 @@
 
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 const buttonsSlice = createSlice({
   name: 'buttons',
@@ -18,7 +18,7 @@ const buttonsSlice = createSlice({
     setButtonBlockThree(state) {
       state.buttonActiveBlockThree = !state.buttonActiveBlockThree;
     },
-    setAllButton(state, action) {
+    setAllButton(state, action: PayloadAction<boolean>) {
       state.buttonActiveBlockOne = action.payload;
       state.buttonActiveBlockTwo = action.payload;
       state.buttonActiveBlockThree = action.payload;

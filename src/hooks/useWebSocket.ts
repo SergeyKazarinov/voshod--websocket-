@@ -26,7 +26,7 @@ export const useWebSocket = (ws: WebSocket | null) => {
         if (normalizedMessage.data) dispatch(setConnectData(normalizedMessage))
         if (normalizedMessage.focus) dispatch(setFocusStatus(normalizedMessage))
         if (normalizedMessage.blur) dispatch(setBlurStatus(normalizedMessage))
-        if (normalizedMessage.success === false) {console.log('ошибка')}
+        if (normalizedMessage.success === false) {console.log(normalizedMessage.message)}
         console.log(normalizedMessage)
       }
 
@@ -35,10 +35,8 @@ export const useWebSocket = (ws: WebSocket | null) => {
       }
 
       ws.onclose = (event) => {
-        // if (event.code !== 1000) {
-          dispatch(setIsButtonInactive(true))
-          dispatch(setErrorConnect(true))
-        // }
+        dispatch(setIsButtonInactive(true))
+        dispatch(setErrorConnect(true))
         dispatch(setAllButton(false));
         console.log(event)
       }

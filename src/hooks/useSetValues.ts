@@ -1,4 +1,4 @@
-import { useState, useCallback, ChangeEvent } from "react";
+import { useState, ChangeEvent } from "react";
 import { IData } from "../types/IWebSocketData";
 
 export const useSetValues = (data: IData) => {

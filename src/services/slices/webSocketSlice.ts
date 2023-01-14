@@ -1,13 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { IData, IStatus } from "../../types/IWebSocketData";
-
-export interface IWebSocketInitialState {
-  block: string;
-  data: IData;
-  status: IStatus;
-  errorConnect: boolean;
-  isButtonInactive: boolean;
-}
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { IData, IStatus, IWebSocketInitialState } from "../../types/IWebSocketData";
+import { IBlurGetData, IFocusGetData } from "../../types/webSocketSlice";
 
 const webSocketSlice = createSlice({
   name: 'webSocket',
@@ -35,25 +28,25 @@ const webSocketSlice = createSlice({
     isButtonInactive: true,
   } as IWebSocketInitialState,
   reducers: {
-    setConnectData(state, action) {
+    setConnectData(state, action: PayloadAction<IWebSocketInitialState>) {
       for (let property in action.payload.data) {
-        state.data = {...state.data, [property]: action.payload.data[property]};
+        state.data = {...state.data, [property]: action.payload.data[property as keyof IData]};
       }
 
       for (let property in action.payload.status) {
-        state.status = {...state.status, [property]: action.payload.status[property]};
+        state.status = {...state.status, [property]: action.payload.status[property as keyof IStatus]};
       }
     },
-    setFocusStatus(state, action) {
+    setFocusStatus(state, action: PayloadAction<IFocusGetData>) {
       state.status = {...state.status, [action.payload.focus]: true};
     },
-    setBlurStatus(state, action) {
+    setBlurStatus(state, action: PayloadAction<IBlurGetData>) {
       state.status = {...state.status, [action.payload.blur]: false};
     },
-    setErrorConnect(state, action) {
+    setErrorConnect(state, action: PayloadAction<boolean>) {
       state.errorConnect = action.payload;
     },
-    setIsButtonInactive(state, action) {
+    setIsButtonInactive(state, action: PayloadAction<boolean>) {
       state.isButtonInactive = action.payload;
     }
   }

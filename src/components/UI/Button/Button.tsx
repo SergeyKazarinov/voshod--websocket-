@@ -3,11 +3,7 @@ import s from './Button.module.scss';
 import { useAppDispatch, useAppSelector } from '../../../hooks/useTypedSelector';
 import { BLOCK_ONE, BLOCK_THREE, BLOCK_TWO } from '../../../utils/constants';
 import { setButtonBlockOne, setButtonBlockThree, setButtonBlockTwo } from '../../../services/slices/buttonsSlice';
-
-interface IButtonProps {
-  title: 'Блок 1' | 'Блок 2' | 'Блок 3';
-  isActiveButton: boolean;
-}
+import { IButtonProps } from '../../../types/componentProps';
 
 const Button: FC<IButtonProps> = ({title, isActiveButton}) => {
   const { isButtonInactive } = useAppSelector(store => store.webSocket)
