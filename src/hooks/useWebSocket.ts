@@ -3,6 +3,7 @@ import { useAppDispatch } from './useTypedSelector';
 import { setBlurStatus, setConnectData, setErrorConnect, setFocusStatus, setIsButtonInactive } from '../services/slices/webSocketSlice';
 import { IFocusData } from '../types/webSocketSlice';
 import { setAllButton } from '../services/slices/buttonsSlice';
+import { ISendMessage } from '../types/IWebSocketData';
 
 interface IConnect {
   command: string;
@@ -25,20 +26,21 @@ export const useWebSocket = (ws: WebSocket | null) => {
         if (normalizedMessage.data) dispatch(setConnectData(normalizedMessage))
         if (normalizedMessage.focus) dispatch(setFocusStatus(normalizedMessage))
         if (normalizedMessage.blur) dispatch(setBlurStatus(normalizedMessage))
-        if (normalizedMessage.success) {console.log('ошибка')}
+        if (normalizedMessage.success === false) {console.log('ошибка')}
         console.log(normalizedMessage)
       }
 
       ws.onerror = (event) => {
-        console.log("onerror")
+        console.log("onerror", event)
       }
 
       ws.onclose = (event) => {
-        if (event.code !== 1000) {
+        // if (event.code !== 1000) {
           dispatch(setIsButtonInactive(true))
           dispatch(setErrorConnect(true))
-        }
+        // }
         dispatch(setAllButton(false));
+        console.log(event)
       }
       
     }
@@ -62,5 +64,11 @@ export const useWebSocket = (ws: WebSocket | null) => {
     }
   }
 
-  return { subscribe, unsubscribe, handleFocus, handleBlur };
+  const handleSendData = ({command, block, valueType, value}: ISendMessage) => {
+    if(ws) {
+      ws.send(JSON.stringify({command, block, data: {[valueType]: value}}))
+    }
+  }
+
+  return { subscribe, unsubscribe, handleFocus, handleBlur, handleSendData };
 }

@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState, useCallback} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import ButtonContainer from '../../components/ButtonContainer/ButtonContainer';
 import Block from '../../components/Block/Block';
 import Input from '../../components/UI/Input/Input';
@@ -13,16 +13,16 @@ const MainPage: FC = () => {
   const { errorConnect } = useAppSelector(store => store.webSocket);
   const dispatch = useAppDispatch();
   const [ws, setWs] = useState<WebSocket | null> (null);
-  const { handleFocus, handleBlur} = useWebSocket(ws)
+  const { handleFocus, handleBlur, handleSendData} = useWebSocket(ws)
 
   const handleConnect = () => {
     dispatch(setErrorConnect(false))
     const ws = new WebSocket(WSS_URL)
-    setWs(ws);
+    setWs(ws)
   }
 
   useEffect(() => {
-    if (ws) {
+    if (ws && ws.readyState !== ws.CLOSED) {
       dispatch(setIsButtonInactive(false))
     } else {
       dispatch(setIsButtonInactive(true))
@@ -41,12 +41,6 @@ const MainPage: FC = () => {
     }
   }, [errorConnect])
 
-  const handleCloseWS = useCallback(() => {
-    ws!.close(4000)
-    setWs(null)
-  }, [ws])
-
-
   const BlockOne = (
     <Block title={BLOCK_ONE} ws={ws}>
       <Input 
@@ -58,6 +52,7 @@ const MainPage: FC = () => {
         minLength={2}
         onFocus={handleFocus}
         onBlur={handleBlur}
+        onSendData={handleSendData}
       />
       <Input
         title={BLOCK_ONE}
@@ -68,6 +63,7 @@ const MainPage: FC = () => {
         minLength={2}
         onFocus={handleFocus}
         onBlur={handleBlur}
+        onSendData={handleSendData}
       />
     </Block>
   )
@@ -83,6 +79,7 @@ const MainPage: FC = () => {
         max={31}
         onFocus={handleFocus}
         onBlur={handleBlur}
+        onSendData={handleSendData}
       />
       <Input
         title={BLOCK_TWO}
@@ -93,6 +90,7 @@ const MainPage: FC = () => {
         min={1}
         onFocus={handleFocus}
         onBlur={handleBlur}
+        onSendData={handleSendData}
       />
     </Block>
   )
@@ -107,6 +105,7 @@ const MainPage: FC = () => {
         placeholder='Введите город'
         onFocus={handleFocus}
         onBlur={handleBlur}
+        onSendData={handleSendData}
       />
       <Input
         title={BLOCK_THREE}
@@ -116,6 +115,7 @@ const MainPage: FC = () => {
         placeholder='Введите улица'
         onFocus={handleFocus}
         onBlur={handleBlur}
+        onSendData={handleSendData}
       />
       <Input
         title={BLOCK_THREE}
@@ -126,6 +126,7 @@ const MainPage: FC = () => {
         pattern={`^[0-9]{6}$`}
         onFocus={handleFocus}
         onBlur={handleBlur}
+        onSendData={handleSendData}
       />
     </Block>
   )
@@ -137,7 +138,6 @@ const MainPage: FC = () => {
       {buttonActiveBlockOne && BlockOne}
       {buttonActiveBlockTwo && BlockTwo}
       {buttonActiveBlockThree && BlockThree}
-      <button type='button' onClick={handleCloseWS}>Закрыть соединение</button>
       {errorConnect && <ErrorConnect />}
     </main>
   );

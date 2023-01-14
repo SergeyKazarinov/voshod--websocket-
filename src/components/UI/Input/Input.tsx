@@ -2,7 +2,7 @@ import {FC, SyntheticEvent, useEffect} from 'react';
 import s from './Input.module.scss';
 import { useSetValues } from '../../../hooks/useSetValues';
 import { useAppSelector } from '../../../hooks/useTypedSelector';
-import { IData, IStatus } from '../../../types/IWebSocketData';
+import { IData, ISendMessage, IStatus } from '../../../types/IWebSocketData';
 import { IFocusData } from '../../../types/webSocketSlice';
 
 interface IInputProps {
@@ -17,17 +17,18 @@ interface IInputProps {
   minLength?: number;
   onFocus: ({command, block, field}: IFocusData) => void;
   onBlur: ({command, block, field}: IFocusData) => void;
+  onSendData: ({command, block, valueType, value}: ISendMessage) => void;
 }
 
-const Input: FC<IInputProps> = ({title, label, type, id, placeholder, pattern, min, max, minLength, onFocus, onBlur}) => {
-  const {values, handleChange, setValues} = useSetValues();
+const Input: FC<IInputProps> = ({title, label, type, id, placeholder, pattern, min, max, minLength, onFocus, onBlur, onSendData}) => {
   const { data, status } = useAppSelector(store => store.webSocket);
+  const {values, handleChange, setValues} = useSetValues(data);
+
 
   useEffect(() => {
-    for (let property in data) {
-      setValues({...values, [property]: data[property as keyof IData]})
-    }
+    setValues((state) => ({...state, [id]: data[id as keyof IData]}))
   }, [data])
+
   
   const handleFocus = (e: SyntheticEvent) => {
     onFocus({
@@ -43,6 +44,13 @@ const Input: FC<IInputProps> = ({title, label, type, id, placeholder, pattern, m
       block: `block${title!.slice(-1)}`,
       field: id
     });
+
+    onSendData({
+      command: 'update',
+      block: `block${title!.slice(-1)}`,
+      valueType: id,
+      value: values[id as keyof IData],
+    })
   }
 
   return (
@@ -58,7 +66,7 @@ const Input: FC<IInputProps> = ({title, label, type, id, placeholder, pattern, m
         min={min}
         max={max}
         minLength={minLength}
-        value={values[id] || data[id as keyof IData]}
+        value={values[id as keyof IData]}
         onChange={handleChange}
         onFocus={handleFocus}
         onBlur={handleBlur}

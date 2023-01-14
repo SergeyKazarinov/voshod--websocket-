@@ -17,3 +17,10 @@ export interface IStatus {
   city: boolean;
   index: boolean;
 }
+
+export interface ISendMessage {
+  command: string;
+  block: string;
+  valueType: string;
+  value: string | number;
+}
