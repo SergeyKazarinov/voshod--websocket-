@@ -1,33 +1,20 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useEffect} from 'react';
 import ButtonContainer from '../../components/ButtonContainer/ButtonContainer';
 import Block from '../../components/Block/Block';
 import Input from '../../components/UI/Input/Input';
 import { BLOCK_ONE, BLOCK_THREE, BLOCK_TWO, WSS_URL } from '../../utils/constants';
-import { useAppDispatch, useAppSelector } from '../../hooks/useTypedSelector';
-import { useWebSocket } from '../../hooks/useWebSocket';
-import { setErrorConnect, setIsButtonInactive } from '../../services/slices/webSocketSlice';
 import ErrorConnect from '../../components/ErrorConnect/ErrorConnect';
+import { useWebSocket } from '../../hooks/useWebSocket';
+import { useAppSelector } from '../../hooks/useTypedSelector';
 
 const MainPage: FC = () => {
   const { buttonActiveBlockOne, buttonActiveBlockThree, buttonActiveBlockTwo } = useAppSelector(store => store.buttons);
   const { errorConnect } = useAppSelector(store => store.webSocket);
-  const dispatch = useAppDispatch();
-  const [ws, setWs] = useState<WebSocket | null> (null);
-  const { handleFocus, handleBlur, handleSendData} = useWebSocket(ws)
+  const { connect, subscribe, unsubscribe, handleFocus, handleBlur, handleSendData } = useWebSocket();
 
   const handleConnect = () => {
-    dispatch(setErrorConnect(false))
-    const ws = new WebSocket(WSS_URL)
-    setWs(ws)
+    connect(WSS_URL);
   }
-
-  useEffect(() => {
-    if (ws && ws.readyState !== ws.CLOSED) {
-      dispatch(setIsButtonInactive(false))
-    } else {
-      dispatch(setIsButtonInactive(true))
-    }
-  }, [ws])
 
   useEffect(() => {
     handleConnect();
@@ -35,14 +22,14 @@ const MainPage: FC = () => {
 
   useEffect(() => {
     if (errorConnect) {
-      setTimeout(() => {
+      setInterval(() => {
         handleConnect()
       }, 5000)
     }
   }, [errorConnect])
 
   const BlockOne = (
-    <Block title={BLOCK_ONE} ws={ws}>
+    <Block title={BLOCK_ONE} subscribe={subscribe} unsubscribe={unsubscribe}>
       <Input 
         title={BLOCK_ONE}
         label='Имя'
@@ -69,7 +56,7 @@ const MainPage: FC = () => {
   )
 
   const BlockTwo = (
-    <Block title={BLOCK_TWO} ws={ws}>
+    <Block title={BLOCK_TWO} subscribe={subscribe} unsubscribe={unsubscribe}>
       <Input
         title={BLOCK_TWO}
         label='День рождения'
@@ -96,7 +83,7 @@ const MainPage: FC = () => {
   )
 
   const BlockThree = (
-    <Block title={BLOCK_THREE} ws={ws}>
+    <Block title={BLOCK_THREE} subscribe={subscribe} unsubscribe={unsubscribe}>
       <Input
         title={BLOCK_THREE}
         label='Город'

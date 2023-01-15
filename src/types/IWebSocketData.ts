@@ -25,6 +25,11 @@ export interface ISendMessage {
   value: string | number;
 }
 
+export interface IConnect {
+  command: string;
+  block: string;
+}
+
 export interface IWebSocketInitialState {
   block: string;
   data: IData;

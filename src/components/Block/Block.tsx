@@ -1,23 +1,12 @@
 import React, {FC, useEffect} from 'react';
 import s from './Block.module.scss';
-import { useWebSocket } from '../../hooks/useWebSocket';
 import { SUBSCRIBE, UNSUBSCRIBE } from '../../utils/constants';
-import { useAppDispatch } from '../../hooks/useTypedSelector';
-import { setErrorConnect, setIsButtonInactive } from '../../services/slices/webSocketSlice';
-import { setAllButton } from '../../services/slices/buttonsSlice';
 import { IBlockProps } from '../../types/componentProps';
 
-const Block: FC<IBlockProps> = ({title, children, ws}) => {
-  const dispatch = useAppDispatch();
-  const { subscribe, unsubscribe } = useWebSocket(ws);
+const Block: FC<IBlockProps> = ({title, children, subscribe, unsubscribe}) => {
   const block = `block${title.slice(-1)}`
 
   useEffect(() => {
-    if (ws?.readyState === 3) {
-      dispatch(setIsButtonInactive(true))
-      dispatch(setAllButton(false))
-      dispatch(setErrorConnect(true))
-    }
     subscribe({command: SUBSCRIBE, block: block})
 
     return () => {

@@ -1,10 +1,11 @@
-import { ISendMessage } from "./IWebSocketData";
+import { IConnect, ISendMessage } from "./IWebSocketData";
 import { IFocusData } from "./webSocketSlice";
 
 export interface IBlockProps {
   title: string;
   children: React.ReactNode;
-  ws: WebSocket | null;
+  subscribe: ({command, block}: IConnect) => void;
+  unsubscribe: ({command, block}: IConnect) => void;
 }
 
 export interface IButtonProps {

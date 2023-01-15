@@ -1,72 +1,77 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useAppDispatch } from './useTypedSelector';
 import { setBlurStatus, setConnectData, setErrorConnect, setFocusStatus, setIsButtonInactive } from '../services/slices/webSocketSlice';
 import { IFocusData } from '../types/webSocketSlice';
 import { setAllButton } from '../services/slices/buttonsSlice';
-import { ISendMessage } from '../types/IWebSocketData';
+import { IConnect, ISendMessage } from '../types/IWebSocketData';
 
-interface IConnect {
-  command: string;
-  block: string;
-}
+export const useWebSocket = () => {
+  const ws = useRef<WebSocket | null>(null);
 
-export const useWebSocket = (ws: WebSocket | null) => {
   const dispatch = useAppDispatch();
 
-  const subscribe = ({command, block}: IConnect) => {
-    if (ws) {
-      ws.onopen = (event: Event) => {
-        console.log(event)
-      }
+  const connect = (url: string) => {
+    ws.current = new WebSocket(url);
 
-      ws.send(JSON.stringify({command, block}))
-  
-      ws.onmessage = (event: MessageEvent<string>) => {
-        const normalizedMessage = JSON.parse(event.data);
-        if (normalizedMessage.data) dispatch(setConnectData(normalizedMessage))
-        if (normalizedMessage.focus) dispatch(setFocusStatus(normalizedMessage))
-        if (normalizedMessage.blur) dispatch(setBlurStatus(normalizedMessage))
-        if (normalizedMessage.success === false) {console.log(normalizedMessage.message)}
-        console.log(normalizedMessage)
-      }
+    ws.current.onopen = (event: Event) => {
+      dispatch(setIsButtonInactive(false))
+      dispatch(setErrorConnect(false))
+    }
 
-      ws.onerror = (event) => {
-        console.log("onerror", event)
-      }
+    ws.current.onmessage = (event: MessageEvent<string>) => {
+      const normalizedMessage = JSON.parse(event.data);
+      if (normalizedMessage.data) dispatch(setConnectData(normalizedMessage))
+      if (normalizedMessage.focus) dispatch(setFocusStatus(normalizedMessage))
+      if (normalizedMessage.blur) dispatch(setBlurStatus(normalizedMessage))
+      console.log(normalizedMessage)
+    }
 
-      ws.onclose = (event) => {
-        dispatch(setIsButtonInactive(true))
+    ws.current.onerror = (event) => {
+      console.log("onerror", event)
+      dispatch(setErrorConnect(true))
+    }
+
+    ws.current.onclose = (event) => {
+      if(event.code !== 1000) {
         dispatch(setErrorConnect(true))
-        dispatch(setAllButton(false));
-        console.log(event)
       }
-      
+
+      dispatch(setIsButtonInactive(true))
+      dispatch(setAllButton(false));
+      console.log('onclose', event)
+    }
+
+  }
+
+  const subscribe = ({command, block}: IConnect) => {
+    if (ws.current) {
+      ws.current.send(JSON.stringify({command, block}))
     }
   }
 
   const handleFocus = ({command, block, field}: IFocusData) => {
-    if(ws) {
-      ws.send(JSON.stringify({command, block, field}))
+    if(ws.current) {
+      ws.current.send(JSON.stringify({command, block, field}))
     }
   }
 
   const handleBlur = ({command, block, field}: IFocusData) => {
-    if(ws) {
-      ws.send(JSON.stringify({command, block, field}))
+    if(ws.current) {
+      ws.current.send(JSON.stringify({command, block, field}))
     }
   }
 
   const unsubscribe = ({command, block}: IConnect) => {
-    if (ws) {
-      ws.send(JSON.stringify({command, block}))
+    if (ws.current) {
+      ws.current.send(JSON.stringify({command, block}))
     }
   }
 
   const handleSendData = ({command, block, valueType, value}: ISendMessage) => {
-    if(ws) {
-      ws.send(JSON.stringify({command, block, data: {[valueType]: value}}))
+    if(ws.current) {
+      ws.current.send(JSON.stringify({command, block, data: {[valueType]: value}}))
     }
   }
 
-  return { subscribe, unsubscribe, handleFocus, handleBlur, handleSendData };
+  return { connect, subscribe, unsubscribe, handleFocus, handleBlur, handleSendData };
 }

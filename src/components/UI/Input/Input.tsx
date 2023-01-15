@@ -8,6 +8,7 @@ import { IInputProps } from '../../../types/componentProps';
 const Input: FC<IInputProps> = ({title, label, type, id, placeholder, pattern, min, max, minLength, onFocus, onBlur, onSendData}) => {
   const { data, status } = useAppSelector(store => store.webSocket);
   const {values, handleChange, setValues} = useSetValues(data);
+  const block = `block${title!.slice(-1)}`;
 
 
   useEffect(() => {
@@ -18,7 +19,7 @@ const Input: FC<IInputProps> = ({title, label, type, id, placeholder, pattern, m
   const handleFocus = (e: SyntheticEvent) => {
     onFocus({
       command: 'focus',
-      block: `block${title!.slice(-1)}`,
+      block: block,
       field: id
     });
   }
@@ -26,13 +27,13 @@ const Input: FC<IInputProps> = ({title, label, type, id, placeholder, pattern, m
   const handleBlur = (e: SyntheticEvent) => {
     onBlur({
       command: 'blur',
-      block: `block${title!.slice(-1)}`,
+      block: block,
       field: id
     });
 
     onSendData({
       command: 'update',
-      block: `block${title!.slice(-1)}`,
+      block: block,
       valueType: id,
       value: values[id as keyof IData],
     })
