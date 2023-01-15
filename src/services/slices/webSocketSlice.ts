@@ -25,6 +25,7 @@ const webSocketSlice = createSlice({
       index: false,
     },
     errorConnect: false,
+    connected: false,
     isButtonInactive: true,
   } as IWebSocketInitialState,
   reducers: {
@@ -48,6 +49,9 @@ const webSocketSlice = createSlice({
     },
     setIsButtonInactive(state, action: PayloadAction<boolean>) {
       state.isButtonInactive = action.payload;
+    },
+    setConnected(state, action: PayloadAction<boolean>) {
+      state.connected = action.payload;
     }
   }
 });
@@ -59,4 +63,5 @@ export const {
   setBlurStatus,
   setErrorConnect,
   setIsButtonInactive,
+  setConnected,
 } = webSocketSlice.actions;

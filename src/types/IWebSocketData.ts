@@ -35,5 +35,6 @@ export interface IWebSocketInitialState {
   data: IData;
   status: IStatus;
   errorConnect: boolean;
+  connected: boolean;
   isButtonInactive: boolean;
 }

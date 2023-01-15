@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { useAppDispatch } from './useTypedSelector';
-import { setBlurStatus, setConnectData, setErrorConnect, setFocusStatus, setIsButtonInactive } from '../services/slices/webSocketSlice';
+import { setBlurStatus, setConnectData, setConnected, setErrorConnect, setFocusStatus, setIsButtonInactive } from '../services/slices/webSocketSlice';
 import { IFocusData } from '../types/webSocketSlice';
 import { setAllButton } from '../services/slices/buttonsSlice';
 import { IConnect, ISendMessage } from '../types/IWebSocketData';
@@ -16,6 +16,7 @@ export const useWebSocket = () => {
     ws.current.onopen = (event: Event) => {
       dispatch(setIsButtonInactive(false))
       dispatch(setErrorConnect(false))
+      dispatch(setConnected(true))
     }
 
     ws.current.onmessage = (event: MessageEvent<string>) => {

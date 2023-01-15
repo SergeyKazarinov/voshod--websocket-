@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import ButtonContainer from '../../components/ButtonContainer/ButtonContainer';
 import Block from '../../components/Block/Block';
 import Input from '../../components/UI/Input/Input';
@@ -9,8 +9,9 @@ import { useAppSelector } from '../../hooks/useTypedSelector';
 
 const MainPage: FC = () => {
   const { buttonActiveBlockOne, buttonActiveBlockThree, buttonActiveBlockTwo } = useAppSelector(store => store.buttons);
-  const { errorConnect } = useAppSelector(store => store.webSocket);
+  const { errorConnect, connected } = useAppSelector(store => store.webSocket);
   const { connect, subscribe, unsubscribe, handleFocus, handleBlur, handleSendData } = useWebSocket();
+  const [intervalConnect, setIntervalConnect] = useState<NodeJS.Timer>();
 
   const handleConnect = () => {
     connect(WSS_URL);
@@ -22,9 +23,10 @@ const MainPage: FC = () => {
 
   useEffect(() => {
     if (errorConnect) {
-      setInterval(() => {
-        handleConnect()
-      }, 5000)
+      const intervalId = setInterval(handleConnect, 5000);
+      setIntervalConnect(intervalId)
+    } else {
+      clearInterval(intervalConnect)
     }
   }, [errorConnect])
 
@@ -125,7 +127,7 @@ const MainPage: FC = () => {
       {buttonActiveBlockOne && BlockOne}
       {buttonActiveBlockTwo && BlockTwo}
       {buttonActiveBlockThree && BlockThree}
-      {errorConnect && <ErrorConnect />}
+      {(errorConnect || !connected) && <ErrorConnect />}
     </main>
   );
 }
